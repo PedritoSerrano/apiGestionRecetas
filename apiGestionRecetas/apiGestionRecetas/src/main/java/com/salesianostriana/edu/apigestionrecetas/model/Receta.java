@@ -23,8 +23,11 @@ public class Receta {
     private String nombre;
     private Integer tiempoPreparacionMin;
     private Dificultad dificultad;
-    @OneToMany
+
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
     private Categoria categoria;
-    @OneToMany
-    private Set<Ingrediente> ingrediente;
+
+    @OneToMany(mappedBy = "receta")
+    private Set<IngredienteReceta> ingredienteRecetas;
 }

@@ -6,22 +6,25 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @Builder
-public class Ingrediente {
+@Entity
+public class IngredienteReceta {
 
     @Id
     @GeneratedValue
     private Long id;
-    @Column(unique = true)
-    private String nombre;
 
-    @OneToMany(mappedBy = "ingrediente")
-    private List<IngredienteReceta> ingredienteRecetas;
+    private double cantidad;
+    private String unidadMedida;
 
+    @ManyToOne
+    @JoinColumn(name = "receta_id")
+    private Receta receta;
+
+    @ManyToOne
+    @JoinColumn(name = "ingrediente_id")
+    private Ingrediente ingrediente;
 }
