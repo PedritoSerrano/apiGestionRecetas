@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -23,6 +23,6 @@ public class Categoria {
     private String nombre;
     private String descripcion;
     @OneToMany(mappedBy = "categoria")
-    private List<Receta> receta;
+    private Set<Receta> receta;
 
 }

@@ -1,4 +1,16 @@
 package com.salesianostriana.edu.apigestionrecetas.dto;
 
-public record IngredienteRecetaRequestDto() {
+import com.salesianostriana.edu.apigestionrecetas.model.IngredienteReceta;
+
+public record IngredienteRecetaRequestDto(
+    Long id,
+
+) {
+
+    public IngredienteReceta toEntity () {
+        return IngredienteReceta.builder()
+
+                .build();
+    }
+
 }
