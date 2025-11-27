@@ -19,7 +19,7 @@ public class GlobalErrorController extends ResponseEntityExceptionHandler {
         );
         problemDetail.setTitle("Elemento no encontrado");
         problemDetail.setType(
-                URI.create()
+                URI.create("https://api.gestionrecetas.com/errors/not-found")
         );
         return problemDetail;
     }
@@ -31,6 +31,9 @@ public class GlobalErrorController extends ResponseEntityExceptionHandler {
             ex.getMessage()
         );
         problemDetail.setTitle("Receta ya existe");
+        problemDetail.setType(
+                URI.create("https://api.gestionrecetas.com/errors/receta-duplicada")
+        );
         return problemDetail;
     }
 
@@ -41,6 +44,9 @@ public class GlobalErrorController extends ResponseEntityExceptionHandler {
             ex.getMessage()
         );
         problemDetail.setTitle("Ingrediente ya añadido");
+        problemDetail.setType(
+                URI.create("https://api.gestionrecetas.com/errors/ingrediente-existente")
+        );
         return problemDetail;
     }
 
@@ -51,6 +57,9 @@ public class GlobalErrorController extends ResponseEntityExceptionHandler {
           ex.getMessage()
         );
         problemDetail.setTitle("Tiempo añadido inválido");
+        problemDetail.setType(
+                URI.create("https://api.gestionrecetas.com/errors/tiempo-invalido")
+        );
         return problemDetail;
     }
 }
