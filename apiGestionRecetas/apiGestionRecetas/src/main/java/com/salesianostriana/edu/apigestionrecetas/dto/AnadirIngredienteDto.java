@@ -8,7 +8,7 @@ public record AnadirIngredienteDto(
         Long ingredienteId,
 
         @Schema(description = "Cantidad del ingrediente", example = "500")
-        String cantidad,
+        double cantidad,
 
         @Schema(description = "Unidad de medida", example = "gramos")
         String unidad

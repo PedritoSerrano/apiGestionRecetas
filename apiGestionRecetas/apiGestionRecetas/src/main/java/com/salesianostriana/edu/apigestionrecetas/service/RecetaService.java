@@ -61,7 +61,7 @@ public class RecetaService {
         recetaRepository.delete(receta);
     }
 
-    public IngredienteReceta anadirIngrediente (Long recetaId, AnadirIngredienteDto dto,IngredienteReceta iR,Receta r, Ingrediente i) {
+    public IngredienteReceta anadirIngrediente (Long recetaId, AnadirIngredienteDto dto) {
 
         Receta receta = recetaRepository.findById(recetaId)
                 .orElseThrow(() -> new EntityNotFoundException("Receta no encontrada"));
@@ -73,7 +73,14 @@ public class RecetaService {
             throw new IngredienteYaAnadidoException("Ya hay un ingrediente con ese id", "Ya hay una recete con ese id");
         }
 
-        return ingredienteRecetaRepository.save(toEntity(iR, r, i));
+        IngredienteReceta iR = IngredienteReceta.builder()
+                .cantidad(dto.cantidad())
+                .unidadMedida(dto.unidad())
+                .receta(receta)
+                .ingrediente(ingrediente)
+                .build();
+
+        return ingredienteRecetaRepository.save(iR);
 
     }
 

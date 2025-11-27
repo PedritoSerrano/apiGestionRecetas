@@ -15,7 +15,7 @@ public record RecetaResponseDto(
         Set<IngredienteRecetaSimpleDto> ingredienteRecetaSimpleDto
 ) {
 
-    public RecetaResponseDto of (Receta r) {
+    public static RecetaResponseDto of (Receta r) {
         return new RecetaResponseDto(
                 r.getId(),
                 r.getNombre(),

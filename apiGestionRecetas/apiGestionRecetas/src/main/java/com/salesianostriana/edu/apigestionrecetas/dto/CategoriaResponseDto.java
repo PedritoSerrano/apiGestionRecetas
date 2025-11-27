@@ -12,7 +12,7 @@ public record CategoriaResponseDto(
         Set<RecetaSimpleDto> recetaSimpleDto
 ) {
 
-    public CategoriaResponseDto of (Categoria c) {
+    public static CategoriaResponseDto of (Categoria c) {
         return new CategoriaResponseDto(
                 c.getId(),
                 c.getNombre(),
