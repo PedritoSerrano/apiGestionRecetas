@@ -1,14 +1,13 @@
 package com.salesianostriana.edu.apigestionrecetas.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -22,6 +21,7 @@ public class Ingrediente {
     private String nombre;
 
     @OneToMany(mappedBy = "ingrediente", fetch = FetchType.EAGER)
-    private Set<IngredienteReceta> ingredienteRecetas;
+    @Builder.Default
+    private List<IngredienteReceta> ingredienteRecetas = new ArrayList<>();
 
 }

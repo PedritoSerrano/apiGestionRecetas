@@ -4,18 +4,19 @@ import com.salesianostriana.edu.apigestionrecetas.model.Ingrediente;
 import com.salesianostriana.edu.apigestionrecetas.model.IngredienteReceta;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public record IngredienteResponseDto(
         Long id,
         String nombre,
-        Set<IngredienteReceta> ingredienteRecetas
+        Set<IngredienteRecetaSimpleDto> ingredienteRecetas
 ) {
 
-    public IngredienteResponseDto of (Ingrediente i) {
+    public IngredienteResponseDto of (Ingrediente i, IngredienteReceta iR) {
         return new IngredienteResponseDto(
             i.getId(),
             i.getNombre(),
-            i.getIngredienteRecetas()
+            i.getIngredienteRecetas().stream().map(IngredienteRecetaSimpleDto::of).collect(Collectors.toSet())
         );
     }
 

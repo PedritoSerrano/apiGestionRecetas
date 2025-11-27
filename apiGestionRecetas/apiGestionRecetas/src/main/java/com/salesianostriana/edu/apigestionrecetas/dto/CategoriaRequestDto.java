@@ -6,7 +6,6 @@ import com.salesianostriana.edu.apigestionrecetas.model.Dificultad;
 import java.util.Set;
 
 public record CategoriaRequestDto(
-    Long id,
     String nombre,
     String descripcion,
     Long receta_id

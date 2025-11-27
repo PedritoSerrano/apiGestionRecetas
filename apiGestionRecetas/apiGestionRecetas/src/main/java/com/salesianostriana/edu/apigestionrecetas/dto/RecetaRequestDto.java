@@ -6,7 +6,6 @@ import com.salesianostriana.edu.apigestionrecetas.model.Receta;
 import java.util.Set;
 
 public record RecetaRequestDto(
-        Long id,
         String nombre,
         Integer tiempoPreparacionMin,
         Dificultad dificultad,
