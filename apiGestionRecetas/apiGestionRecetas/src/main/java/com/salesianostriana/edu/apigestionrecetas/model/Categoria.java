@@ -22,7 +22,7 @@ public class Categoria {
     @Column(unique = true)
     private String nombre;
     private String descripcion;
-    @OneToMany(mappedBy = "categoria")
+    @OneToMany(mappedBy = "categoria", fetch = FetchType.EAGER)
     private Set<Receta> receta;
 
 }

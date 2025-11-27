@@ -28,6 +28,6 @@ public class Receta {
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
-    @OneToMany(mappedBy = "receta")
+    @OneToMany(mappedBy = "receta", fetch = FetchType.EAGER)
     private Set<IngredienteReceta> ingredienteRecetas;
 }

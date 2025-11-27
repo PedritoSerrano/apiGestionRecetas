@@ -21,7 +21,7 @@ public class Ingrediente {
     @Column(unique = true)
     private String nombre;
 
-    @OneToMany(mappedBy = "ingrediente")
+    @OneToMany(mappedBy = "ingrediente", fetch = FetchType.EAGER)
     private Set<IngredienteReceta> ingredienteRecetas;
 
 }
