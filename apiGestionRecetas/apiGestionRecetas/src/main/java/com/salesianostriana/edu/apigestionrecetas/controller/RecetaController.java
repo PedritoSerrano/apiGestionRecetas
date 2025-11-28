@@ -66,7 +66,7 @@ public class RecetaController {
                                     {
                                         "nombre": "Migas extremeñas",
                                         "tiempoPreparacionMin": 60,
-                                        "dificultad": "MEDIA",
+                                        "dificultad": "MEDIO",
                                         "categoriaId": 1
                                     }
                                 """)
@@ -74,9 +74,8 @@ public class RecetaController {
             )
             @RequestBody RecetaRequestDto dto
     ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-                RecetaResponseDto.of(recetaService.create(dto))
-        );
+        RecetaResponseDto create = recetaService.create(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(create);
     }
 
     @Operation(summary = "Actualizar receta existente")
@@ -108,17 +107,28 @@ public class RecetaController {
         return RecetaResponseDto.of(recetaService.update(id, dto));
     }
 
+    @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar receta")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Receta eliminada exitosamente"),
             @ApiResponse(responseCode = "404", description = "Receta no encontrada")
     })
-    @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        recetaService.deleteById(id);
+
+        recetaService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Añadir ingrediente a una receta")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Ingrediente añadido exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Receta o ingrediente no encontrado",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))),
+            @ApiResponse(responseCode = "409", description = "El ingrediente ya está añadido a la receta",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
+    })
     @PostMapping("/{recetaId}/ingredientes")
     public ResponseEntity<IngredienteRecetaDto> anadirIngrediente(
             @PathVariable Long recetaId,
@@ -169,6 +179,35 @@ public class RecetaController {
             @RequestBody AnadirIngredienteDto dto) {
         IngredienteReceta iR = recetaService.anadirIngrediente(recetaId, dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(IngredienteRecetaDto.of(iR));
+    }
+
+    @Operation(summary = "Actualizar ingrediente de una receta")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ingrediente actualizado exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Receta o ingrediente no encontrado")
+    })
+    @PutMapping("/{recetaId}/ingredientes/{ingredienteId}")
+    public ResponseEntity<IngredienteRecetaDto> updateIngrediente(
+            @PathVariable Long recetaId,
+            @PathVariable Long ingredienteId,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Datos actualizados del ingrediente en la receta",
+                    required = true,
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AnadirIngredienteDto.class),
+                            examples = @ExampleObject("""
+                                    {
+                                        "ingredienteId": 1,
+                                        "cantidad": "2",
+                                        "unidad": "kilogramos"
+                                    }
+                                """)
+                    )
+            )
+            @RequestBody AnadirIngredienteDto dto
+    ) {
+        IngredienteReceta iR = recetaService.updateIngrediente(recetaId, ingredienteId, dto);
+        return ResponseEntity.ok(IngredienteRecetaDto.of(iR));
     }
 
 }

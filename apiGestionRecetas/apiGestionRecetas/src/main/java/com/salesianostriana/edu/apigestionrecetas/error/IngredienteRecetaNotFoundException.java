@@ -6,7 +6,7 @@ public class IngredienteRecetaNotFoundException extends EntityNotFoundException 
     }
 
     public IngredienteRecetaNotFoundException(Long id) {
-        super("No hay ningún ingredienteReceta con este ID: %id".formatted(id));
+        super("No hay ningún ingredienteReceta con este ID: %d".formatted(id));
     }
 
     public IngredienteRecetaNotFoundException() {

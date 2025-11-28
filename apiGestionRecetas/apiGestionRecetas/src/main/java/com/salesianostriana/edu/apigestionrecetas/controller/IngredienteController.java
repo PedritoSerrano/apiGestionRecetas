@@ -73,4 +73,51 @@ package com.salesianostriana.edu.apigestionrecetas.controller;
                     IngredienteResponseDto.of(ingredienteService.create(dto))
             );
         }
+
+        @Operation(summary = "Actualizar ingrediente existente")
+        @ApiResponses(value = {
+                @ApiResponse(responseCode = "200", description = "Ingrediente actualizado exitosamente"),
+                @ApiResponse(responseCode = "404", description = "Ingrediente no encontrado",
+                        content = @Content(mediaType = "application/json",
+                                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))),
+                @ApiResponse(responseCode = "409", description = "Ya existe un ingrediente con ese nombre",
+                        content = @Content(mediaType = "application/json",
+                                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
+        })
+        @PutMapping("/{id}")
+        public ResponseEntity<IngredienteResponseDto> update(
+                @PathVariable Long id,
+                @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                        description = "Datos del ingrediente actualizados ",
+                        required = true,
+                        content = @Content(mediaType = "application/json",
+                                schema = @Schema(implementation = IngredienteRequestDto.class),
+                                examples = @ExampleObject("""
+                                        {
+                                            "nombre": "Tomate Cherry",
+                                            "unidadMedida": "kg"
+                                        }
+                                    """)
+                        )
+                )
+                @RequestBody IngredienteRequestDto dto
+        ) {
+            return ResponseEntity.ok(
+                    IngredienteResponseDto.of(ingredienteService.update(id, dto))
+            );
+        }
+
+        @Operation(summary = "Eliminar ingrediente por ID")
+        @ApiResponses(value = {
+                @ApiResponse(responseCode = "204", description = "Ingrediente eliminado exitosamente"),
+                @ApiResponse(responseCode = "404", description = "Ingrediente no encontrado",
+                        content = @Content(mediaType = "application/json",
+                                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
+        })
+        @DeleteMapping("/{id}")
+        public ResponseEntity<Void> delete(@PathVariable Long id) {
+            ingredienteService.delete(id);
+            return ResponseEntity.noContent().build();
+        }
+
     }

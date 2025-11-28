@@ -10,14 +10,4 @@ public record RecetaRequestDto(
         Integer tiempoPreparacionMin,
         Dificultad dificultad,
         Long categoria_id
-) {
-
-    public Receta toEntity () {
-        return Receta.builder()
-                .nombre(nombre)
-                .tiempoPreparacionMin(tiempoPreparacionMin)
-                .dificultad(dificultad)
-                .build();
-    }
-
-}
+) {}

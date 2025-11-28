@@ -49,8 +49,14 @@ public class CategoriaService {
     }
 
     public void deleteById(Long id) {
-        Categoria categoria = findById(id);
-        categoriaRepository. delete(categoria);
+        Categoria categoria = categoriaRepository.findById(id)
+                .orElseThrow(() -> new CategoriaNotFoundException(id));
+
+        if (!categoria.getReceta().isEmpty()) {
+            throw new IllegalStateException("No se puede eliminar una categoría con recetas asociadas");
+        }
+
+        categoriaRepository.delete(categoria);
     }
 
 }

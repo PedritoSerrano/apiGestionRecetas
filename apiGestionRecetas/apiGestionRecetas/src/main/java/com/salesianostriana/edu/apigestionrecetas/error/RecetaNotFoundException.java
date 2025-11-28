@@ -6,7 +6,7 @@ public class RecetaNotFoundException extends EntityNotFoundException {
     }
 
     public RecetaNotFoundException(Long id) {
-        super("No hay ninguna receta con este ID");
+        super("No hay ninguna receta con este ID: %d".formatted(id));
     }
 
     public RecetaNotFoundException() {

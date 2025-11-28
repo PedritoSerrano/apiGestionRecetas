@@ -6,7 +6,7 @@ public class EntityNotFoundException extends RuntimeException {
     }
 
     public EntityNotFoundException (Long id) {
-        super("Ya hay un ingrediente con ese id" + id);
+        super("Ya hay un ingrediente con ese id: %d".formatted(id));
     }
 
 }

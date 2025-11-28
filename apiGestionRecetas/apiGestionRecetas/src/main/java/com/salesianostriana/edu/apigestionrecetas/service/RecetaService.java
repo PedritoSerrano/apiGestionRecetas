@@ -3,11 +3,13 @@ package com.salesianostriana.edu.apigestionrecetas.service;
 import com.salesianostriana.edu.apigestionrecetas.dto.AnadirIngredienteDto;
 import com.salesianostriana.edu.apigestionrecetas.dto.IngredienteRequestDto;
 import com.salesianostriana.edu.apigestionrecetas.dto.RecetaRequestDto;
+import com.salesianostriana.edu.apigestionrecetas.dto.RecetaResponseDto;
 import com.salesianostriana.edu.apigestionrecetas.error.*;
 import com.salesianostriana.edu.apigestionrecetas.model.Categoria;
 import com.salesianostriana.edu.apigestionrecetas.model.Ingrediente;
 import com.salesianostriana.edu.apigestionrecetas.model.IngredienteReceta;
 import com.salesianostriana.edu.apigestionrecetas.model.Receta;
+import com.salesianostriana.edu.apigestionrecetas.repository.CategoriaRepository;
 import com.salesianostriana.edu.apigestionrecetas.repository.IngredienteRecetaRepository;
 import com.salesianostriana.edu.apigestionrecetas.repository.IngredienteRepository;
 import com.salesianostriana.edu.apigestionrecetas.repository.RecetaRepository;
@@ -21,6 +23,7 @@ import java.util.List;
 public class RecetaService {
 
     private final RecetaRepository recetaRepository;
+    private final CategoriaRepository categoriaRepository;
     private final IngredienteRepository ingredienteRepository;
     private final IngredienteRecetaRepository ingredienteRecetaRepository;
 
@@ -33,12 +36,13 @@ public class RecetaService {
                 .orElseThrow(() -> new RecetaNotFoundException(id));
     }
 
-    public Receta create(RecetaRequestDto dto) {
+    public RecetaResponseDto create(RecetaRequestDto dto) {
         if (recetaRepository.existsByNombre(dto.nombre())) {
             throw new RecetaYaCreadaException(dto.nombre());
         }
 
-        return recetaRepository.save(dto.toEntity());
+        Categoria c = categoriaRepository.findById(dto.categoria_id()).orElseThrow(() -> new CategoriaNotFoundException(dto.categoria_id()));
+        return RecetaResponseDto.of(recetaRepository.save(toEntity(c,dto)));
     }
 
     public Receta update(Long id, RecetaRequestDto dto) {
@@ -56,8 +60,9 @@ public class RecetaService {
         return recetaRepository.save(recetaExistente);
     }
 
-    public void deleteById(Long id) {
-        Receta receta = findById(id);
+    public void delete(Long recetaId) {
+        Receta receta = recetaRepository.findById(recetaId)
+                .orElseThrow(() -> new RecetaNotFoundException(recetaId));
         recetaRepository.delete(receta);
     }
 
@@ -82,6 +87,38 @@ public class RecetaService {
 
         return ingredienteRecetaRepository.save(iR);
 
+    }
+
+    public IngredienteReceta updateIngrediente(Long recetaId, Long ingredienteId, AnadirIngredienteDto dto) {
+        Receta receta = recetaRepository.findById(recetaId)
+                .orElseThrow(() -> new RecetaNotFoundException(recetaId));
+
+        IngredienteReceta ingredienteReceta = ingredienteRecetaRepository
+                .findByRecetaIdAndIngredienteId(recetaId, ingredienteId)
+                .orElseThrow(() -> new EntityNotFoundException("Ingrediente no encontrado en la receta"));
+
+        Ingrediente nuevoIngrediente = ingredienteRepository.findById(dto.ingredienteId())
+                .orElseThrow(() -> new IngredienteNotFoundException(dto.ingredienteId()));
+
+        if (!ingredienteId.equals(dto.ingredienteId()) &&
+            ingredienteRecetaRepository.existsByRecetaIdAndIngredienteId(recetaId, dto.ingredienteId())) {
+            throw new IngredienteYaAnadidoException("Ya hay un ingrediente con ese id", "Ya hay una receta con ese id");
+        }
+
+        ingredienteReceta.setIngrediente(nuevoIngrediente);
+        ingredienteReceta.setCantidad(dto.cantidad());
+        ingredienteReceta.setUnidadMedida(dto.unidad());
+
+        return ingredienteRecetaRepository.save(ingredienteReceta);
+    }
+
+    public Receta toEntity (Categoria c,RecetaRequestDto dto) {
+        return Receta.builder()
+                .nombre(dto.nombre())
+                .tiempoPreparacionMin(dto.tiempoPreparacionMin())
+                .dificultad(dto.dificultad())
+                .categoria(c)
+                .build();
     }
 
     public IngredienteReceta toEntity (IngredienteReceta iR,Receta r, Ingrediente i) {
