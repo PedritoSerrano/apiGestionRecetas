@@ -1,7 +1,7 @@
 package com.salesianostriana.edu.apigestionrecetas.controller;
 
 import com.salesianostriana.edu.apigestionrecetas.dto.AnadirIngredienteDto;
-import com.salesianostriana.edu.apigestionrecetas.dto.IngredienteEnRecetaDto;
+import com.salesianostriana.edu.apigestionrecetas.dto.IngredienteRecetaDto;
 import com.salesianostriana.edu.apigestionrecetas.dto.RecetaRequestDto;
 import com.salesianostriana.edu.apigestionrecetas.dto.RecetaResponseDto;
 import com.salesianostriana.edu.apigestionrecetas.model.IngredienteReceta;
@@ -120,7 +120,7 @@ public class RecetaController {
     }
 
     @PostMapping("/{recetaId}/ingredientes")
-    public ResponseEntity<IngredienteEnRecetaDto> anadirIngrediente(
+    public ResponseEntity<IngredienteRecetaDto> anadirIngrediente(
             @PathVariable Long recetaId,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = """
@@ -168,7 +168,7 @@ public class RecetaController {
             )
             @RequestBody AnadirIngredienteDto dto) {
         IngredienteReceta iR = recetaService.anadirIngrediente(recetaId, dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(IngredienteEnRecetaDto.of(iR));
+        return ResponseEntity.status(HttpStatus.CREATED).body(IngredienteRecetaDto.of(iR));
     }
 
 }
