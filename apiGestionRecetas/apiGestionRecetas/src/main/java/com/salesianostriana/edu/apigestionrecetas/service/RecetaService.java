@@ -41,7 +41,7 @@ public class RecetaService {
             throw new RecetaYaCreadaException(dto.nombre());
         }
 
-        Categoria c = categoriaRepository.findById(dto.categoria_id()).orElseThrow(() -> new CategoriaNotFoundException(dto.categoria_id()));
+        Categoria c = categoriaRepository.findById(dto.categoriaId()).orElseThrow(() -> new CategoriaNotFoundException(dto.categoriaId()));
         return RecetaResponseDto.of(recetaRepository.save(toEntity(c,dto)));
     }
 

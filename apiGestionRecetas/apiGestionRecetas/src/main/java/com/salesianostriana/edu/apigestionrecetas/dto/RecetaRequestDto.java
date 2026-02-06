@@ -9,5 +9,5 @@ public record RecetaRequestDto(
         String nombre,
         Integer tiempoPreparacionMin,
         Dificultad dificultad,
-        Long categoria_id
+        Long categoriaId
 ) {}
