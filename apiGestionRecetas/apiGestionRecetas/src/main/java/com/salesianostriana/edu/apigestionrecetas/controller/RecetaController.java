@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,7 +73,7 @@ public class RecetaController {
                                 """)
                     )
             )
-            @RequestBody RecetaRequestDto dto
+            @Valid @RequestBody RecetaRequestDto dto
     ) {
         RecetaResponseDto create = recetaService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(create);
@@ -131,6 +132,7 @@ public class RecetaController {
     })
     @PostMapping("/{recetaId}/ingredientes")
     public ResponseEntity<IngredienteRecetaDto> anadirIngrediente(
+            @Valid
             @PathVariable Long recetaId,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = """
